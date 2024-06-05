@@ -58,9 +58,8 @@ var (
 			}
 			tcpMux := cmux.New(conn)
 			log.Infow("start listening", "port", conf.Get().Port)
-			k := kernel.New(kernel.Config{
-				Listener: conn})
-			k.Map(&tcpMux)
+			k := kernel.New(kernel.Config{})
+			k.Map(&conn, &tcpMux)
 			k.RegMod(
 				&b2x.Mod{},
 				&grpcGateway.Mod{},
@@ -105,5 +104,5 @@ var (
 )
 
 func init() {
-	//StartCmd.PersistentFlags().StringVarP(&configYml, "config", "c", "config/config.yaml", "Start server with provided configuration file")
+	StartCmd.PersistentFlags().StringVarP(&configYml, "config", "c", "", "Start server with provided configuration file")
 }

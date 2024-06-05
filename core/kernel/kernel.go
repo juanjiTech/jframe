@@ -5,7 +5,6 @@ import (
 	"github.com/juanjiTech/inject/v2"
 	"github.com/juanjiTech/jframe/conf"
 	"github.com/juanjiTech/jframe/core/logx"
-	"net"
 	"sync"
 )
 
@@ -17,15 +16,12 @@ type Engine struct {
 
 	ConfigListener []func(*conf.GlobalConfig)
 
-	listener net.Listener
-
 	inject.Injector
 	modules   map[string]Module
 	modulesMu sync.Mutex
 }
 
 type Config struct {
-	Listener     net.Listener
 	EnableSentry bool
 }
 
@@ -35,7 +31,6 @@ func New(config ...Config) *Engine {
 	}
 	return &Engine{
 		config:   config[0],
-		listener: config[0].Listener,
 		Injector: inject.New(),
 		modules:  make(map[string]Module),
 	}

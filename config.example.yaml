@@ -8,10 +8,10 @@ Log:
         TopicID: ""
 MySQL:
     Addr: "localhost"
-    Port: "13306"
+    Port: "3306"
     User: "root"
     Password: "123456"
-    Database: "nemertes"
+    Database: "jframe"
     UseTLS: false
     Debug: false
 Redis:
