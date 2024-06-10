@@ -9,10 +9,10 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:          "mod",
-	Short:        "mod",
+	Use:          "jframe",
 	SilenceUsage: true,
-	Long:         `mod`,
+	Short:        "jframe is a Golang framework with unlimited creativity",
+	Example:      "jframe server -c ./config.yaml",
 }
 
 func init() {

@@ -37,7 +37,7 @@ func GenToken(info Info, expire ...time.Duration) (token string, err error) {
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(expire[0]).Unix(),
 			IssuedAt:  time.Now().Unix(),
-			Issuer:    "nemertes",
+			Issuer:    "jframe",
 		},
 	}
 	t := jwt.NewWithClaims(jwt.SigningMethodHS256, c)

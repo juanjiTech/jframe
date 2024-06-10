@@ -26,7 +26,7 @@ func (m *Mod) Load(hub *kernel.Hub) error {
 		return errors.New("can't load jin.Engine from kernel")
 	}
 
-	authStr := "Basic " + base64.StdEncoding.EncodeToString([]byte("pprof:nemertes"))
+	authStr := "Basic " + base64.StdEncoding.EncodeToString([]byte("pprof:jframe"))
 	g := jinE.Group("/debug/pprof", func(c *jin.Context) {
 		auth := c.Request.URL.Query().Get("Authorization")
 		if auth == "" {

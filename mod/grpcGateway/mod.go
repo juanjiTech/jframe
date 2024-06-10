@@ -70,7 +70,7 @@ func (m *Mod) PostInit(h *kernel.Hub) error {
 		//grpc.WithBlock(),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	}
-	conn, err := grpc.DialContext(context.Background(), fmt.Sprintf("127.0.0.1:%s", conf.Get().Port), opts...)
+	conn, err := grpc.NewClient(fmt.Sprintf("127.0.0.1:%s", conf.Get().Port), opts...)
 	if err != nil {
 		h.Log.Fatal("gRPC fail to dial: %v", err)
 	}

@@ -18,8 +18,8 @@ var (
 	force    bool
 	StartCmd = &cobra.Command{
 		Use:     "create",
-		Short:   "create a new mod",
-		Example: "mod create -n users",
+		Short:   "Create a new mod",
+		Example: "jframe create -n users",
 		Run: func(cmd *cobra.Command, args []string) {
 			err := load()
 			if err != nil {

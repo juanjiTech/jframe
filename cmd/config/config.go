@@ -13,7 +13,7 @@ var (
 	StartCmd   = &cobra.Command{
 		Use:     "config",
 		Short:   "Generate config file",
-		Example: "mod config -p ./config.yaml -f",
+		Example: "jframe config -p ./config.yaml -f",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("Generating config...")
 			err := load()

@@ -5,7 +5,7 @@ COPY . /build
 WORKDIR /build
 
 RUN set -ex \
-    && GO111MODULE=auto CGO_ENABLED=0 go build -ldflags "-s -w -extldflags '-static' -X 'github.com/asjdf/nemertes/conf.SysVersion=$(git show -s --format=%h)'" -o App
+    && GO111MODULE=auto CGO_ENABLED=0 go build -ldflags "-s -w -extldflags '-static' -X 'github.com/juanjiTech/jframe/conf.SysVersion=$(git show -s --format=%h)'" -o App
 
 FROM alpine:latest
 
