@@ -32,5 +32,12 @@ type GlobalConfig struct {
 		BucketKey   string `yaml:"BucketKey"`
 		BucketName  string `yaml:"BucketName"`
 	} `yaml:"B2"`
+	Pyroscope struct {
+		ApplicationName string `yaml:"ApplicationName"`
+		ServerAddress   string `yaml:"ServerAddress"`
+		BasicAuthUser   string `yaml:"BasicAuthUser"`
+		BasicAuthPass   string `yaml:"BasicAuthPass"`
+		TenantID        string `yaml:"TenantID"`
+	} `yaml:"Pyroscope"`
 	SentryDsn string `yaml:"SentryDsn"`
 }

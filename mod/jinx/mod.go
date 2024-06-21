@@ -50,8 +50,7 @@ func (m *Mod) Init(hub *kernel.Hub) error {
 
 func (m *Mod) Load(hub *kernel.Hub) error {
 	var jinE jin.Engine
-	err := hub.Load(&jinE)
-	if err != nil {
+	if hub.Load(&jinE) != nil {
 		return errors.New("can't load jin.Engine from kernel")
 	}
 	return nil
