@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"github.com/juanjiTech/jframe/conf"
 	"github.com/juanjiTech/jframe/core/kernel"
+	"github.com/juanjiTech/jframe/mod/jinx/healthcheck"
 	rds "github.com/redis/go-redis/v9"
+	"time"
 )
 
 var _ kernel.Module = (*Mod)(nil)
@@ -30,6 +32,11 @@ func (m *Mod) PreInit(hub *kernel.Hub) error {
 	if err != nil {
 		return err
 	}
+
+	err = healthcheck.RegisterHealthChecker(&healthChecker{rdb: rdb})
+	if err != nil {
+		return err
+	}
 	hub.Map(&rdb)
 	return nil
 }
@@ -45,6 +52,23 @@ func (m *Mod) Init(hub *kernel.Hub) error {
 		return err
 	}
 	return nil
+}
+
+var _ healthcheck.Checker = (*healthChecker)(nil)
+
+type healthChecker struct {
+	rdb *rds.Client
+}
+
+func (h *healthChecker) Pass() bool {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	_, err := h.rdb.Ping(ctx).Result()
+	return err == nil
+}
+
+func (h *healthChecker) Name() string {
+	return "redis"
 }
 
 //var builderPool = sync.Pool{

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/juanjiTech/jframe/conf"
 	"github.com/juanjiTech/jframe/core/kernel"
+	"github.com/juanjiTech/jframe/mod/jinx/healthcheck"
 	"github.com/juanjiTech/jin"
 	"github.com/juanjiTech/jin/middleware/cors"
 	sentryjin "github.com/juanjiTech/sentry-jin"
@@ -45,6 +46,7 @@ func (m *Mod) Init(hub *kernel.Hub) error {
 	if conf.Get().SentryDsn != "" {
 		m.j.Use(sentryjin.New(sentryjin.Options{Repanic: true}))
 	}
+	healthcheck.Register(m.j)
 
 	hub.Map(m.j)
 	return nil
