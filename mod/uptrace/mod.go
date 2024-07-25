@@ -63,6 +63,7 @@ func (m *Mod) Load(hub *kernel.Hub) error {
 	} else {
 		hub.Log.Info("find gorm in kernel, enable tracing for gorm ...")
 		if err := db.Use(tracing.NewPlugin()); err != nil {
+			hub.Log.Error("failed to enable tracing for GORM", "error", err)
 			return err
 		}
 	}

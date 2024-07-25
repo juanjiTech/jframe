@@ -26,6 +26,7 @@ require (
 	github.com/tencentcloud/tencentcloud-cls-sdk-go v1.0.8
 	github.com/uptrace/uptrace-go v1.27.1
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.53.0
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.53.0
 	go.uber.org/zap v1.27.0
 	golang.org/x/crypto v0.24.0
 	google.golang.org/grpc v1.65.0
@@ -35,6 +36,7 @@ require (
 	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/mysql v1.4.7
 	gorm.io/gorm v1.25.8
+	gorm.io/plugin/opentelemetry v0.1.4
 )
 
 require (
@@ -44,6 +46,7 @@ require (
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
+	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-sql-driver/mysql v1.7.0 // indirect
@@ -95,5 +98,4 @@ require (
 	google.golang.org/genproto/googleapis/api v0.0.0-20240528184218-531527333157 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240701130421-f6361c86f094 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
-	gorm.io/plugin/opentelemetry v0.1.4 // indirect
 )
