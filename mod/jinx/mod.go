@@ -9,7 +9,9 @@ import (
 	"github.com/juanjiTech/jin"
 	"github.com/juanjiTech/jin/middleware/cors"
 	sentryjin "github.com/juanjiTech/sentry-jin"
+	"github.com/opentracing/opentracing-go"
 	"github.com/soheilhy/cmux"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"net"
 	"net/http"
 	"sync"
@@ -65,8 +67,21 @@ func (m *Mod) Start(hub *kernel.Hub) error {
 
 	httpL := tcpMux.Match(cmux.HTTP1Fast())
 	m.listener = httpL
-	m.httpSrv = &http.Server{
-		Handler: m.j,
+
+	// check if tracer exist
+	var tracer opentracing.Tracer
+	if hub.Load(&tracer) != nil {
+		m.httpSrv = &http.Server{
+			Handler: m.j,
+		}
+	} else {
+		fmt.Println("tracer find in kernel, enable http tracing ...")
+		m.httpSrv = &http.Server{
+			Handler: otelhttp.NewHandler(
+				m.j,
+				conf.Get().Uptrace.ServiceName,
+			),
+		}
 	}
 
 	if err := m.httpSrv.Serve(httpL); err != nil && !errors.Is(err, http.ErrServerClosed) {

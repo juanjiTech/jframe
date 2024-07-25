@@ -5,12 +5,12 @@ import (
 	"github.com/juanjiTech/jframe/conf"
 	"github.com/juanjiTech/jframe/core/kernel"
 	"github.com/juanjiTech/jframe/core/logx"
-	"github.com/juanjiTech/jframe/mod/b2x"
 	"github.com/juanjiTech/jframe/mod/grpcGateway"
 	"github.com/juanjiTech/jframe/mod/jinPprof"
 	"github.com/juanjiTech/jframe/mod/jinx"
 	"github.com/juanjiTech/jframe/mod/myDB"
 	"github.com/juanjiTech/jframe/mod/rds"
+	"github.com/juanjiTech/jframe/mod/uptrace"
 	"github.com/juanjiTech/jframe/pkg/ip"
 	"github.com/juanjiTech/jframe/pkg/sentry"
 	"github.com/soheilhy/cmux"
@@ -61,7 +61,8 @@ var (
 			k := kernel.New(kernel.Config{})
 			k.Map(&conn, &tcpMux)
 			k.RegMod(
-				&b2x.Mod{},
+				//&b2x.Mod{},
+				&uptrace.Mod{},
 				&grpcGateway.Mod{},
 				&jinPprof.Mod{},
 				&jinx.Mod{},

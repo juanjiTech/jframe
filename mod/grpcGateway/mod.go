@@ -17,7 +17,9 @@ import (
 	"github.com/juanjiTech/jframe/mod/grpcGateway/gateway"
 	"github.com/juanjiTech/jframe/mod/grpcGateway/middleware"
 	"github.com/juanjiTech/jin"
+	"github.com/opentracing/opentracing-go"
 	"github.com/soheilhy/cmux"
+	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/reflection"
@@ -42,13 +44,17 @@ func (m *Mod) Name() string {
 
 func (m *Mod) PreInit(hub *kernel.Hub) error {
 	grpcZap.ReplaceGrpcLoggerV2(logx.NameSpace("grpc").Desugar())
-	m.grpc = grpc.NewServer(grpc.UnaryInterceptor(grpcMiddleware.ChainUnaryServer(
-		grpcCtxTags.UnaryServerInterceptor(),
-		grpcOpentracing.UnaryServerInterceptor(),
-		grpcZap.UnaryServerInterceptor(logx.NameSpace("grpc").Desugar()),
-		grpcRecovery.UnaryServerInterceptor(),
-		grpcAuth.UnaryServerInterceptor(middleware.AuthInterceptor),
-	)))
+	m.grpc = grpc.NewServer(
+		grpc.UnaryInterceptor(
+			grpcMiddleware.ChainUnaryServer(
+				grpcCtxTags.UnaryServerInterceptor(),
+				grpcOpentracing.UnaryServerInterceptor(),
+				grpcZap.UnaryServerInterceptor(logx.NameSpace("grpc").Desugar()),
+				grpcRecovery.UnaryServerInterceptor(),
+				grpcAuth.UnaryServerInterceptor(middleware.AuthInterceptor),
+			),
+		),
+	)
 	reflection.Register(m.grpc)
 	hub.Log.Info("init gRPC server success...")
 	hub.Map(m.grpc)
@@ -70,6 +76,32 @@ func (m *Mod) PostInit(h *kernel.Hub) error {
 		//grpc.WithBlock(),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	}
+
+	// if tracer can be found from kernel, enable tracing for gRPC gateway
+	var tracer opentracing.Tracer
+	if h.Load(&tracer) != nil {
+		h.Log.Info("no tracer find from kernel, skip tracing for gRPC gateway")
+	} else {
+		h.Log.Info("tracer find from kernel, enable tracing for gRPC gateway ...")
+		h.Log.Info("tracer find from kernel, set StatusHandler for gRPC server ...")
+		// if tracer can be found, register tracing middleware for gRPC server
+		m.grpc = grpc.NewServer(
+			grpc.UnaryInterceptor(
+				grpcMiddleware.ChainUnaryServer(
+					grpcCtxTags.UnaryServerInterceptor(),
+					grpcOpentracing.UnaryServerInterceptor(),
+					grpcZap.UnaryServerInterceptor(logx.NameSpace("grpc").Desugar()),
+					grpcRecovery.UnaryServerInterceptor(),
+					grpcAuth.UnaryServerInterceptor(middleware.AuthInterceptor),
+				),
+			),
+			grpc.StatsHandler(otelgrpc.NewServerHandler()),
+		)
+		reflection.Register(m.grpc)
+		h.Map(m.grpc)
+		opts = append(opts, grpc.WithStatsHandler(otelgrpc.NewClientHandler()))
+	}
+
 	conn, err := grpc.NewClient(fmt.Sprintf("127.0.0.1:%s", conf.Get().Port), opts...)
 	if err != nil {
 		h.Log.Fatal("gRPC fail to dial: %v", err)
