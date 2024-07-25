@@ -39,5 +39,10 @@ type GlobalConfig struct {
 		BasicAuthPass   string `yaml:"BasicAuthPass"`
 		TenantID        string `yaml:"TenantID"`
 	} `yaml:"Pyroscope"`
+	Uptrace struct {
+		ServiceName    string `yaml:"ServiceName"`
+		ServiceVersion string `yaml:"ServiceVersion"`
+		DSN            string `yaml:"DSN"`
+	} `yaml:"Uptrace"`
 	SentryDsn string `yaml:"SentryDsn"`
 }
