@@ -14,6 +14,7 @@ type Hub struct {
 
 type Module interface {
 	Name() string
+	Config() any
 	PreInit(*Hub) error
 	Init(*Hub) error
 	PostInit(*Hub) error
@@ -24,7 +25,7 @@ type Module interface {
 	mustEmbedUnimplementedModule()
 }
 
-func (e *Engine) RegMod(mods ...Module) {
+func (e *Engine) RegMod(mods []Module) {
 	e.modulesMu.Lock()
 	defer e.modulesMu.Unlock()
 	for _, mod := range mods {
@@ -46,6 +47,10 @@ type UnimplementedModule struct {
 
 func (u *UnimplementedModule) Name() string {
 	panic("name of module should be defined")
+}
+
+func (u *UnimplementedModule) Config() any {
+	return nil
 }
 
 func (u *UnimplementedModule) PreInit(*Hub) error {

@@ -5,6 +5,8 @@ import (
 	"github.com/juanjiTech/inject/v2"
 	"github.com/juanjiTech/jframe/conf"
 	"github.com/juanjiTech/jframe/core/logx"
+	"github.com/spf13/viper"
+	"go.uber.org/zap"
 	"sync"
 )
 
@@ -43,6 +45,20 @@ func (e *Engine) Init() {
 func (e *Engine) StartModule() error {
 	hub := Hub{
 		Injector: e.Injector,
+	}
+	for _, module := range e.modules {
+		//if reflect.TypeOf(module.Config()) != nil &&
+		//	reflect.TypeOf(module.Config()).Elem().Kind() == reflect.Struct {
+		zap.S().Info("Module " + module.Name() + " has config, try to load it")
+		// viper has already been initialized in the main function
+		//if err := viper.ReadInConfig(); err != nil {
+		//	hub.Log.Error("Config Read failed: " + err.Error())
+		//}
+		modConf := module.Config()
+		if err := viper.UnmarshalKey(module.Name(), &modConf); err != nil {
+			zap.S().Error("Config Unmarshal failed: " + err.Error())
+		}
+		//}
 	}
 	for _, m := range e.modules {
 		h4m := hub

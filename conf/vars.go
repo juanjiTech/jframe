@@ -45,9 +45,4 @@ type GlobalConfig struct {
 		DSN            string `yaml:"DSN"`
 	} `yaml:"Uptrace"`
 	SentryDsn string `yaml:"SentryDsn"`
-	Uptrace   struct {
-		ServiceName    string `yaml:"ServiceName"`
-		ServiceVersion string `yaml:"ServiceVersion"`
-		DSN            string `yaml:"DSN"`
-	} `yaml:"Uptrace"`
 }

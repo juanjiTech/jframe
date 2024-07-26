@@ -61,6 +61,24 @@ func GenYamlConfig(path string, force bool) error {
 	return nil
 }
 
+//	func GenYamlConfigWithMod(path string, force bool) error {
+//		if !fsx.FileExist(path) || force {
+//			config := &GlobalConfig{MODE: "debug"}
+//			for _, mod := range modList.ModList {
+//
+//			}
+//
+//			data, _ := yaml.Marshal(config)
+//			err := os.WriteFile(path, data, 0644)
+//			if err != nil {
+//				return errors.New("Generate file with error: " + err.Error())
+//			}
+//			fmt.Println("Config file `config.yaml` generate success in " + path)
+//		} else {
+//			return errors.New(path + " already exist, use -f to Force coverage")
+//		}
+//		return nil
+//	}
 func Get() *GlobalConfig {
 	return serveConfig
 }
