@@ -20,14 +20,14 @@ import (
 var log = logx.NameSpace("cmd.server")
 
 var (
-	ConfigPath string
+	configPath string
 	StartCmd   = &cobra.Command{
 		Use:     "server",
 		Short:   "Start server",
 		Example: "jframe server -c ./config.yaml",
 		Run: func(cmd *cobra.Command, args []string) {
 			log.Info("loading config...")
-			conf.LoadConfig(ConfigPath)
+			conf.LoadConfig(configPath)
 			log.Info("loading config complete")
 
 			log.Info("init dep...")
@@ -97,5 +97,5 @@ var (
 )
 
 func init() {
-	StartCmd.PersistentFlags().StringVarP(&ConfigPath, "config", "c", "", "Start server with provided configuration file")
+	StartCmd.PersistentFlags().StringVarP(&configPath, "config", "c", "", "Start server with provided configuration file")
 }
