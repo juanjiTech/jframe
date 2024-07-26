@@ -41,6 +41,7 @@ var (
 			}
 			defer func() {
 				if err := recover(); err != nil {
+					log.Errorw("panic", "error", err)
 					_ = log.Sync()
 				}
 			}()
