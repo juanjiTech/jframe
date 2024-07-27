@@ -48,11 +48,11 @@ func (e *Engine) StartModule() error {
 		Injector: e.Injector,
 	}
 	for _, module := range e.modules {
-		zap.S().Info("Module " + module.Name() + " has config, try to load it")
 		c := module.Config()
 		if c == nil {
 			continue
 		}
+		zap.S().Info("Module " + module.Name() + " has config, try to load it")
 		ct := reflect.TypeOf(c)
 		if ct.Kind() != reflect.Pointer {
 			zap.S().Errorf("The config exported by module %s is not a pointer.", module.Name())
