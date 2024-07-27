@@ -14,6 +14,7 @@ type Hub struct {
 
 type Module interface {
 	Name() string
+	Config() any
 	PreInit(*Hub) error
 	Init(*Hub) error
 	PostInit(*Hub) error
@@ -46,6 +47,10 @@ type UnimplementedModule struct {
 
 func (u *UnimplementedModule) Name() string {
 	panic("name of module should be defined")
+}
+
+func (u *UnimplementedModule) Config() any {
+	return nil
 }
 
 func (u *UnimplementedModule) PreInit(*Hub) error {

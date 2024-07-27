@@ -2,15 +2,10 @@ package server
 
 import (
 	"fmt"
+	"github.com/juanjiTech/jframe/cmd/server/modList"
 	"github.com/juanjiTech/jframe/conf"
 	"github.com/juanjiTech/jframe/core/kernel"
 	"github.com/juanjiTech/jframe/core/logx"
-	"github.com/juanjiTech/jframe/mod/grpcGateway"
-	"github.com/juanjiTech/jframe/mod/jinPprof"
-	"github.com/juanjiTech/jframe/mod/jinx"
-	"github.com/juanjiTech/jframe/mod/myDB"
-	"github.com/juanjiTech/jframe/mod/rds"
-	"github.com/juanjiTech/jframe/mod/uptrace"
 	"github.com/juanjiTech/jframe/pkg/ip"
 	"github.com/juanjiTech/jframe/pkg/sentry"
 	"github.com/soheilhy/cmux"
@@ -25,14 +20,14 @@ import (
 var log = logx.NameSpace("cmd.server")
 
 var (
-	configYml string
-	StartCmd  = &cobra.Command{
+	configPath string
+	StartCmd   = &cobra.Command{
 		Use:     "server",
 		Short:   "Start server",
 		Example: "jframe server -c ./config.yaml",
 		Run: func(cmd *cobra.Command, args []string) {
 			log.Info("loading config...")
-			conf.LoadConfig(configYml)
+			conf.LoadConfig(configPath)
 			log.Info("loading config complete")
 
 			log.Info("init dep...")
@@ -46,6 +41,7 @@ var (
 			}
 			defer func() {
 				if err := recover(); err != nil {
+					log.Errorw("panic", "error", err)
 					_ = log.Sync()
 				}
 			}()
@@ -60,15 +56,9 @@ var (
 			log.Infow("start listening", "port", conf.Get().Port)
 			k := kernel.New(kernel.Config{})
 			k.Map(&conn, &tcpMux)
-			k.RegMod(
-				//&b2x.Mod{},
-				&uptrace.Mod{},
-				&grpcGateway.Mod{},
-				&jinPprof.Mod{},
-				&jinx.Mod{},
-				&myDB.Mod{},
-				&rds.Mod{},
-			)
+			// ModList is a list of module that you want to start
+			// the place to add your module is in modList.go
+			k.RegMod(modList.ModList...)
 			k.Init()
 			log.Info("init kernel complete")
 
@@ -105,5 +95,5 @@ var (
 )
 
 func init() {
-	StartCmd.PersistentFlags().StringVarP(&configYml, "config", "c", "", "Start server with provided configuration file")
+	StartCmd.PersistentFlags().StringVarP(&configPath, "config", "c", "", "Start server with provided configuration file")
 }

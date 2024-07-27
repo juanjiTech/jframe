@@ -5,6 +5,9 @@ import (
 	"github.com/juanjiTech/inject/v2"
 	"github.com/juanjiTech/jframe/conf"
 	"github.com/juanjiTech/jframe/core/logx"
+	"github.com/spf13/viper"
+	"go.uber.org/zap"
+	"reflect"
 	"sync"
 )
 
@@ -43,6 +46,20 @@ func (e *Engine) Init() {
 func (e *Engine) StartModule() error {
 	hub := Hub{
 		Injector: e.Injector,
+	}
+	for _, module := range e.modules {
+		zap.S().Info("Module " + module.Name() + " has config, try to load it")
+		c := module.Config()
+		if c == nil {
+			continue
+		}
+		ct := reflect.TypeOf(c)
+		if ct.Kind() != reflect.Pointer {
+			zap.S().Errorf("The config exported by module %s is not a pointer.", module.Name())
+		}
+		if err := viper.UnmarshalKey(module.Name(), module.Config()); err != nil {
+			zap.S().Error("Config Unmarshal failed: " + err.Error())
+		}
 	}
 	for _, m := range e.modules {
 		h4m := hub
