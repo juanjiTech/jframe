@@ -58,9 +58,7 @@ var (
 			k.Map(&conn, &tcpMux)
 			// ModList is a list of module that you want to start
 			// the place to add your module is in modList.go
-			k.RegMod(
-				modList.ModList,
-			)
+			k.RegMod(modList.ModList...)
 			k.Init()
 			log.Info("init kernel complete")
 

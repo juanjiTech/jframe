@@ -25,7 +25,7 @@ type Module interface {
 	mustEmbedUnimplementedModule()
 }
 
-func (e *Engine) RegMod(mods []Module) {
+func (e *Engine) RegMod(mods ...Module) {
 	e.modulesMu.Lock()
 	defer e.modulesMu.Unlock()
 	for _, mod := range mods {

@@ -48,8 +48,7 @@ func (e *Engine) StartModule() error {
 	}
 	for _, module := range e.modules {
 		zap.S().Info("Module " + module.Name() + " has config, try to load it")
-		modConf := module.Config()
-		if err := viper.UnmarshalKey(module.Name(), &modConf); err != nil {
+		if err := viper.UnmarshalKey(module.Name(), module.Config()); err != nil {
 			zap.S().Error("Config Unmarshal failed: " + err.Error())
 		}
 	}
