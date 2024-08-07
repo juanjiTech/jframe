@@ -3,7 +3,6 @@ package kernel
 import (
 	"context"
 	"github.com/juanjiTech/inject/v2"
-	"github.com/juanjiTech/jframe/conf"
 	"github.com/juanjiTech/jframe/core/logx"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -16,8 +15,6 @@ type Engine struct {
 
 	Ctx    context.Context
 	Cancel context.CancelFunc
-
-	ConfigListener []func(*conf.GlobalConfig)
 
 	inject.Injector
 	modules   map[string]Module
