@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/juanjiTech/jframe/conf"
 	"github.com/juanjiTech/jframe/core/kernel"
 	"github.com/juanjiTech/jframe/mod/jinx/healthcheck"
 	rds "github.com/redis/go-redis/v9"
@@ -13,19 +12,31 @@ import (
 
 var _ kernel.Module = (*Mod)(nil)
 
+type Config struct {
+	Addr     string `yaml:"Addr"`
+	PORT     string `yaml:"Port"`
+	PASSWORD string `yaml:"Password"`
+	DB       int    `yaml:"Db"`
+}
+
 type Mod struct {
 	kernel.UnimplementedModule // 请为所有Module引入UnimplementedModule
+	config                     Config
+}
+
+func (m *Mod) Config() any {
+	return &m.config
 }
 
 func (m *Mod) Name() string {
-	return "rds"
+	return "Redis"
 }
 
 func (m *Mod) PreInit(hub *kernel.Hub) error {
 	rdb := rds.NewClient(&rds.Options{
-		Addr:     fmt.Sprintf("%s:%s", conf.Get().Redis.Addr, conf.Get().Redis.PORT),
-		Password: conf.Get().Redis.PASSWORD,
-		DB:       conf.Get().Redis.DB,
+		Addr:     fmt.Sprintf("%s:%s", m.config.Addr, m.config.PORT),
+		Password: m.config.PASSWORD,
+		DB:       m.config.DB,
 	})
 
 	_, err := rdb.Ping(context.Background()).Result()

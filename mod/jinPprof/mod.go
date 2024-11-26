@@ -20,7 +20,7 @@ func (m *Mod) Name() string {
 }
 
 func (m *Mod) Load(hub *kernel.Hub) error {
-	var jinE jin.Engine
+	var jinE *jin.Engine
 	err := hub.Load(&jinE)
 	if err != nil {
 		return errors.New("can't load jin.Engine from kernel")

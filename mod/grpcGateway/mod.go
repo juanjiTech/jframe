@@ -122,7 +122,7 @@ func (m *Mod) PostInit(h *kernel.Hub) error {
 		runtime.WithErrorHandler(runtime.DefaultHTTPErrorHandler),
 	)
 
-	var http jin.Engine
+	var http *jin.Engine
 	err = h.Load(&http)
 	if err != nil {
 		return errors.New("can't load jin from kernel")

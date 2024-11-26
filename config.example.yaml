@@ -6,6 +6,11 @@ Log:
         AccessKey: ""
         AccessToken: ""
         TopicID: ""
+SentryDsn: ""
+B2:
+    BucketKeyID: ""
+    BucketKey: ""
+    BucketName: ""
 MySQL:
     Addr: "localhost"
     Port: "3306"
@@ -14,8 +19,18 @@ MySQL:
     Database: "jframe"
     UseTLS: false
     Debug: false
+Pyroscope:
+    ApplicationName: ""
+    ServerAddress: ""
+    BasicAuthUser: ""
+    BasicAuthPass: ""
+    TenantID: ""
 Redis:
     Addr: "localhost"
     Port: "6379"
     Password: ""
     Db: 0
+Uptrace:
+    ServiceName: ""
+    ServiceVersion: ""
+    DSN: ""

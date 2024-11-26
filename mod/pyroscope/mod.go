@@ -3,25 +3,39 @@ package pyroscope
 import (
 	"context"
 	"github.com/grafana/pyroscope-go"
-	"github.com/juanjiTech/jframe/conf"
 	"github.com/juanjiTech/jframe/core/kernel"
 	"os"
 	"sync"
 )
 
+type Config struct {
+	ApplicationName string `yaml:"ApplicationName"`
+	ServerAddress   string `yaml:"ServerAddress"`
+	BasicAuthUser   string `yaml:"BasicAuthUser"`
+	BasicAuthPass   string `yaml:"BasicAuthPass"`
+	TenantID        string `yaml:"TenantID"`
+}
+
 var _ kernel.Module = (*Mod)(nil)
 
 type Mod struct {
 	kernel.UnimplementedModule // 请为所有Module引入UnimplementedModule
-	profiler                   *pyroscope.Profiler
+
+	config Config
+
+	profiler *pyroscope.Profiler
 }
 
 func (m *Mod) Name() string {
-	return "pyroscope"
+	return "Pyroscope"
+}
+
+func (m *Mod) Config() any {
+	return &m.config
 }
 
 func (m *Mod) PreInit(hub *kernel.Hub) error {
-	pyroscopeConf := conf.Get().Pyroscope
+	pyroscopeConf := m.config
 	if pyroscopeConf.ServerAddress == "" {
 		hub.Log.Info("pyroscope server address is empty, skip init pyroscope")
 		return nil

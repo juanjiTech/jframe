@@ -4,27 +4,38 @@ import (
 	"context"
 	"errors"
 	"github.com/Backblaze/blazer/b2"
-	"github.com/juanjiTech/jframe/conf"
 	"github.com/juanjiTech/jframe/core/kernel"
 	"sync"
 )
 
 var _ kernel.Module = (*Mod)(nil)
 
+type Config struct {
+	BucketKeyID string `yaml:"BucketKeyID"`
+	BucketKey   string `yaml:"BucketKey"`
+	BucketName  string `yaml:"BucketName"`
+}
+
 type Mod struct {
 	kernel.UnimplementedModule // 请为所有Module引入UnimplementedModule
+
+	config Config
 
 	cancel context.CancelFunc
 }
 
+func (m *Mod) Config() any {
+	return &m.config
+}
+
 func (m *Mod) Name() string {
-	return "b2x"
+	return "B2"
 }
 
 func (m *Mod) PreInit(hub *kernel.Hub) error {
 	ctx, cancel := context.WithCancel(context.Background())
 	m.cancel = cancel
-	b2Conf := conf.Get().B2
+	b2Conf := m.config
 	b2Client, err := b2.NewClient(ctx, b2Conf.BucketKeyID, b2Conf.BucketKey)
 	if err != nil {
 		hub.Log.Error(err)

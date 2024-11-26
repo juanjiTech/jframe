@@ -42,7 +42,7 @@ func (m *Mod) Load(h *kernel.Hub) error {
 	var str2 string
 	_ = h.Load(&str2) // 也可以这样从内核获取上面注册的依赖
 
-	var http jin.Engine
+	var http *jin.Engine
 	err := h.Load(&http)
 	if err != nil {
 		return errors.New("can't load jin from kernel")

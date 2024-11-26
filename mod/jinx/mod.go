@@ -48,12 +48,12 @@ func (m *Mod) Init(hub *kernel.Hub) error {
 	}
 	healthcheck.Register(m.j)
 
-	hub.Map(m.j)
+	hub.Map(&m.j)
 	return nil
 }
 
 func (m *Mod) Load(hub *kernel.Hub) error {
-	var jinE jin.Engine
+	var jinE *jin.Engine
 	if hub.Load(&jinE) != nil {
 		return errors.New("can't load jin.Engine from kernel")
 	}
@@ -81,7 +81,7 @@ func (m *Mod) Start(hub *kernel.Hub) error {
 		m.httpSrv = &http.Server{
 			Handler: otelhttp.NewHandler(
 				m.j,
-				conf.Get().Uptrace.ServiceName,
+				"server",
 			),
 		}
 	}

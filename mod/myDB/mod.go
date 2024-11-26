@@ -30,7 +30,7 @@ func (m *Mod) Config() any {
 }
 
 func (m *Mod) Name() string {
-	return "myDB"
+	return "MySQL"
 }
 
 func (m *Mod) PreInit(hub *kernel.Hub) error {
