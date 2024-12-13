@@ -35,6 +35,11 @@ func (m *Mod) Name() string {
 
 func (m *Mod) Config() any { return &m.config }
 func (m *Mod) Init(hub *kernel.Hub) error {
+	if m.config.DSN == "" {
+		hub.Log.Info("DSN of uptrace is empty, skip initialize uptrace")
+		return nil
+	}
+
 	uptrace.ConfigureOpentelemetry(
 		uptrace.WithDSN(m.config.DSN),
 		uptrace.WithServiceName(m.config.ServiceName),
@@ -59,6 +64,11 @@ func (m *Mod) Init(hub *kernel.Hub) error {
 }
 
 func (m *Mod) Load(hub *kernel.Hub) error {
+	if m.tracer == nil {
+		// uptrace is empty, skip initialize uptrace
+		return nil
+	}
+
 	var tracer opentracing.Tracer
 	if hub.Load(&tracer) != nil {
 		hub.Log.Error("can't load tracer from kernel")
@@ -85,6 +95,12 @@ func (m *Mod) Start(hub *kernel.Hub) error {
 
 func (m *Mod) Stop(wg *sync.WaitGroup, ctx context.Context) error {
 	defer wg.Done()
+
+	if m.tracer == nil {
+		// uptrace is empty, skip initialize uptrace
+		return nil
+	}
+
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
