@@ -17,8 +17,6 @@ import (
 	"syscall"
 )
 
-var log = logx.NameSpace("cmd.server")
-
 var (
 	configPath string
 	StartCmd   = &cobra.Command{
@@ -26,6 +24,8 @@ var (
 		Short:   "Start server",
 		Example: "jframe server -c ./config.yaml",
 		Run: func(cmd *cobra.Command, args []string) {
+			logx.PreInit()
+			log := logx.NameSpace("cmd.server")
 			log.Info("loading config...")
 			conf.LoadConfig(configPath)
 			log.Info("loading config complete")
@@ -42,7 +42,6 @@ var (
 			defer func() {
 				if err := recover(); err != nil {
 					log.Errorw("panic", "error", err)
-					_ = log.Sync()
 				}
 			}()
 			log.Info("init dep complete")
@@ -50,7 +49,8 @@ var (
 			log.Info("init kernel...")
 			conn, err := net.Listen("tcp", fmt.Sprintf(":%s", conf.Get().Port))
 			if err != nil {
-				log.Fatalw("failed to listen", "error", err)
+				log.Errorw("failed to listen", "error", err)
+				return
 			}
 			tcpMux := cmux.New(conn)
 			log.Infow("start listening", "port", conf.Get().Port)

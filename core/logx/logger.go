@@ -37,6 +37,16 @@ func getEncoder() zapcore.Encoder {
 	return zapcore.NewConsoleEncoder(encoderConfig)
 }
 
+func PreInit() {
+	encoder := getEncoder()
+	core := zapcore.NewCore(encoder, os.Stdout, zap.DebugLevel)
+	options := []zap.Option{
+		zap.AddCaller(),
+		zap.AddStacktrace(zap.ErrorLevel),
+	}
+	zap.ReplaceGlobals(zap.New(core, options...))
+}
+
 func Init(level zapcore.LevelEnabler) {
 	writeSyncer := getLogWriter()
 	//if level == zapcore.DebugLevel {
