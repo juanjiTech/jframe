@@ -30,7 +30,7 @@ func (m *Mod) Config() any {
 }
 
 func (m *Mod) Name() string {
-	return "MySQL"
+	return "mySQL"
 }
 
 func (m *Mod) PreInit(hub *kernel.Hub) error {
@@ -47,6 +47,7 @@ func (m *Mod) PreInit(hub *kernel.Hub) error {
 
 	hub.Log.Info("mysql init success")
 	hub.Map(&db)
+	db.Begin()
 	return nil
 }
 

@@ -29,7 +29,7 @@ func (m *Mod) Config() any {
 }
 
 func (m *Mod) Name() string {
-	return "Redis"
+	return "redis"
 }
 
 func (m *Mod) PreInit(hub *kernel.Hub) error {

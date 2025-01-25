@@ -27,7 +27,7 @@ type Mod struct {
 }
 
 func (m *Mod) Name() string {
-	return "Pyroscope"
+	return "pyroscope"
 }
 
 func (m *Mod) Config() any {

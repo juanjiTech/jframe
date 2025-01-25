@@ -30,7 +30,7 @@ type Mod struct {
 }
 
 func (m *Mod) Name() string {
-	return "Uptrace"
+	return "uptrace"
 }
 
 func (m *Mod) Config() any { return &m.config }

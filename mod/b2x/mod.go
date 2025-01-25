@@ -29,7 +29,7 @@ func (m *Mod) Config() any {
 }
 
 func (m *Mod) Name() string {
-	return "B2"
+	return "b2"
 }
 
 func (m *Mod) PreInit(hub *kernel.Hub) error {
