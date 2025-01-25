@@ -4,19 +4,20 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/juanjiTech/jframe/core/kernel"
 	"github.com/juanjiTech/jframe/mod/jinx/healthcheck"
 	rds "github.com/redis/go-redis/v9"
-	"time"
 )
 
 var _ kernel.Module = (*Mod)(nil)
 
 type Config struct {
-	Addr     string `yaml:"Addr"`
-	PORT     string `yaml:"Port"`
-	PASSWORD string `yaml:"Password"`
-	DB       int    `yaml:"Db"`
+	Addr     string `yaml:"addr"`
+	PORT     string `yaml:"port"`
+	PASSWORD string `yaml:"password"`
+	DB       int    `yaml:"db"`
 }
 
 type Mod struct {

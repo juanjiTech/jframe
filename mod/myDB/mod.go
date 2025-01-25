@@ -3,6 +3,7 @@ package myDB
 import (
 	"errors"
 	"fmt"
+
 	"github.com/juanjiTech/jframe/core/kernel"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -16,13 +17,13 @@ type Mod struct {
 }
 
 type Config struct {
-	Addr     string `yaml:"Addr"`
-	PORT     string `yaml:"Port"`
-	USER     string `yaml:"User"`
-	PASSWORD string `yaml:"Password"`
-	DATABASE string `yaml:"Database"`
-	UseTLS   bool   `yaml:"UseTLS"`
-	Debug    bool   `yaml:"Debug"`
+	Addr     string `yaml:"addr"`
+	PORT     string `yaml:"port"`
+	USER     string `yaml:"user"`
+	PASSWORD string `yaml:"password"`
+	DATABASE string `yaml:"database"`
+	UseTLS   bool   `yaml:"useTLS"`
+	Debug    bool   `yaml:"debug"`
 }
 
 func (m *Mod) Config() any {

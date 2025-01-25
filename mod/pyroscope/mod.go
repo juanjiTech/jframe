@@ -2,18 +2,19 @@ package pyroscope
 
 import (
 	"context"
-	"github.com/grafana/pyroscope-go"
-	"github.com/juanjiTech/jframe/core/kernel"
 	"os"
 	"sync"
+
+	"github.com/grafana/pyroscope-go"
+	"github.com/juanjiTech/jframe/core/kernel"
 )
 
 type Config struct {
-	ApplicationName string `yaml:"ApplicationName"`
-	ServerAddress   string `yaml:"ServerAddress"`
-	BasicAuthUser   string `yaml:"BasicAuthUser"`
-	BasicAuthPass   string `yaml:"BasicAuthPass"`
-	TenantID        string `yaml:"TenantID"`
+	ApplicationName string `yaml:"applicationName"`
+	ServerAddress   string `yaml:"serverAddress"`
+	BasicAuthUser   string `yaml:"basicAuthUser"`
+	BasicAuthPass   string `yaml:"basicAuthPass"`
+	TenantID        string `yaml:"tenantID"`
 }
 
 var _ kernel.Module = (*Mod)(nil)

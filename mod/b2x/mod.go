@@ -11,9 +11,9 @@ import (
 var _ kernel.Module = (*Mod)(nil)
 
 type Config struct {
-	BucketKeyID string `yaml:"BucketKeyID"`
-	BucketKey   string `yaml:"BucketKey"`
-	BucketName  string `yaml:"BucketName"`
+	BucketKeyID string `yaml:"bucketKeyId"`
+	BucketKey   string `yaml:"bucketKey"`
+	BucketName  string `yaml:"bucketName"`
 }
 
 type Mod struct {

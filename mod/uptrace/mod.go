@@ -3,19 +3,20 @@ package uptrace
 import (
 	"context"
 	"errors"
+	"sync"
+	"time"
+
 	"github.com/juanjiTech/jframe/core/kernel"
 	"github.com/opentracing/opentracing-go"
 	"github.com/uptrace/uptrace-go/uptrace"
 	"gorm.io/gorm"
 	"gorm.io/plugin/opentelemetry/tracing"
-	"sync"
-	"time"
 )
 
 type Config struct {
-	ServiceName    string `yaml:"ServiceName"`
-	ServiceVersion string `yaml:"ServiceVersion"`
-	DSN            string `yaml:"DSN"`
+	ServiceName    string `yaml:"serviceName"`
+	ServiceVersion string `yaml:"serviceVersion"`
+	DSN            string `yaml:"dsn"`
 }
 
 var _ kernel.Module = (*Mod)(nil)
