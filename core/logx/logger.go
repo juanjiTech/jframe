@@ -1,14 +1,15 @@
 package logx
 
 import (
+	"log"
+	"os"
+
 	"github.com/juanjiTech/jframe/conf"
 	"github.com/juanjiTech/jframe/pkg/clsLog"
 	tencentcloud_cls_sdk_go "github.com/tencentcloud/tencentcloud-cls-sdk-go"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	lumberjackV2 "gopkg.in/natefinch/lumberjack.v2"
-	"log"
-	"os"
 )
 
 // NameSpace - 提供带有模块命名空间的logger
@@ -48,11 +49,10 @@ func PreInit() {
 }
 
 func Init(level zapcore.LevelEnabler) {
-	writeSyncer := getLogWriter()
-	//if level == zapcore.DebugLevel {
-	//	writeSyncer = zapcore.NewMultiWriteSyncer(writeSyncer, zapcore.AddSync(os.Stdout))
-	//}
-	writeSyncer = zapcore.NewMultiWriteSyncer(writeSyncer, os.Stdout)
+	writeSyncer := zapcore.AddSync(os.Stdout)
+	if conf.Get().Log.LogPath != "" {
+		writeSyncer = zapcore.NewMultiWriteSyncer(writeSyncer, getLogWriter())
+	}
 	encoder := getEncoder()
 	core := zapcore.NewCore(encoder, writeSyncer, level)
 	options := []zap.Option{
