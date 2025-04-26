@@ -1,15 +1,16 @@
 package healthcheck
 
 import (
+	"net/http"
+	"strings"
+	"sync"
+
 	"github.com/juanjiTech/jin"
 	"github.com/oklog/ulid/v2"
 	"github.com/pkg/errors"
 	"github.com/samber/lo"
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/sync/singleflight"
-	"net/http"
-	"strings"
-	"sync"
 )
 
 var (

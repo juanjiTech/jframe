@@ -84,7 +84,6 @@ func (s *Status) String(verbose bool) string {
 	s.Each(func(name string, status StatusCode) {
 		switch status {
 		case StatusOK:
-			allPass = false
 		case StatusError:
 			allPass = false
 		case StatusExcluded:
