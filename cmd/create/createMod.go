@@ -3,13 +3,14 @@ package create
 import (
 	"bytes"
 	"fmt"
-	"github.com/juanjiTech/jframe/mod/example"
-	"github.com/pkg/errors"
-	"github.com/spf13/cobra"
 	"io/fs"
 	"log"
 	"os"
 	"path"
+
+	"github.com/juanjiTech/jframe/mod/example"
+	"github.com/pkg/errors"
+	"github.com/spf13/cobra"
 )
 
 var (
@@ -33,8 +34,8 @@ var (
 
 func init() {
 	StartCmd.PersistentFlags().StringVarP(&appName, "name", "n", "", "create a new mod with provided name")
-	StartCmd.PersistentFlags().StringVarP(&dir, "path", "p", "internal/mod", "new file will generate under provided path")
-	StartCmd.PersistentFlags().BoolVarP(&force, "force", "f", false, "Force generate the mod")
+	StartCmd.PersistentFlags().StringVarP(&dir, "path", "p", "mod", "new file will generate under provided path")
+	StartCmd.PersistentFlags().BoolVarP(&force, "force", "f", false, "force generate the mod")
 }
 
 func load() error {
