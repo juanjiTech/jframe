@@ -16,7 +16,8 @@ var _ kernel.Module = (*Mod)(nil)
 type Config struct {
 	Addr     string `yaml:"addr"`
 	PORT     string `yaml:"port"`
-	PASSWORD string `yaml:"password"`
+	Username string `yaml:"username"`
+	Password string `yaml:"password"`
 	DB       int    `yaml:"db"`
 }
 
@@ -36,7 +37,8 @@ func (m *Mod) Name() string {
 func (m *Mod) PreInit(hub *kernel.Hub) error {
 	rdb := rds.NewClient(&rds.Options{
 		Addr:     fmt.Sprintf("%s:%s", m.config.Addr, m.config.PORT),
-		Password: m.config.PASSWORD,
+		Username: m.config.Username,
+		Password: m.config.Password,
 		DB:       m.config.DB,
 	})
 
