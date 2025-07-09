@@ -83,7 +83,6 @@ func (e *Engine) StartModule() error {
 		if err := viper.Unmarshal(instance.Interface()); err != nil {
 			zap.S().Error("Config Unmarshal failed: " + err.Error())
 		}
-		fmt.Println(module.Config())
 	}
 	for _, m := range e.modules {
 		h4m := hub
