@@ -33,7 +33,7 @@ func (m *Mod) Name() string {
 	return "jinx"
 }
 
-func (m *Mod) Init(hub *kernel.Hub) error {
+func (m *Mod) PreInit(hub *kernel.Hub) error {
 	m.j = jin.New()
 	corsConf := cors.DefaultConfig()
 	corsConf.AllowAllOrigins = true
