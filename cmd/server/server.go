@@ -2,6 +2,12 @@ package server
 
 import (
 	"fmt"
+	"net"
+	"os"
+	"os/signal"
+	"strings"
+	"syscall"
+
 	"github.com/juanjiTech/jframe/cmd/server/modList"
 	"github.com/juanjiTech/jframe/conf"
 	"github.com/juanjiTech/jframe/core/kernel"
@@ -10,11 +16,8 @@ import (
 	"github.com/juanjiTech/jframe/pkg/sentry"
 	"github.com/soheilhy/cmux"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"go.uber.org/zap/zapcore"
-	"net"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 var (
@@ -27,6 +30,12 @@ var (
 			logx.PreInit()
 			log := logx.NameSpace("cmd.server")
 			log.Info("loading config...")
+			// Enable BindStruct to allow unmarshal env into a nested struct
+			// https://github.com/spf13/viper/pull/1429
+			viper.SetOptions(viper.ExperimentalBindStruct())
+			// This line allows viper to use an env var like ORIGIN_VALUE to override the viper string "Origin.Value"
+			viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+			viper.AutomaticEnv()
 			conf.LoadConfig(configPath)
 			log.Info("loading config complete")
 

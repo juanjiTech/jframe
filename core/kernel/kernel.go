@@ -2,12 +2,14 @@ package kernel
 
 import (
 	"context"
+	"fmt"
+	"reflect"
+	"sync"
+
 	"github.com/juanjiTech/inject/v2"
 	"github.com/juanjiTech/jframe/core/logx"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
-	"reflect"
-	"sync"
 )
 
 type Engine struct {
@@ -54,9 +56,34 @@ func (e *Engine) StartModule() error {
 		if ct.Kind() != reflect.Pointer {
 			zap.S().Errorf("The config exported by module %s is not a pointer.", module.Name())
 		}
-		if err := viper.UnmarshalKey(module.Name(), module.Config()); err != nil {
+
+		// The Viper can't unmarshal config from env directly into a map, so we need to
+		// create a dynamic struct that has a single field with the mapstructure tag
+		// corresponding to the module's name. This allows Viper to unmarshal the
+		// configuration for a specific module based on its name.
+		// The created struct is equivalent to:
+		//
+		// type DynamicConfig struct {
+		//     Config *ModuleConfigType `mapstructure:"module_name"`
+		// }
+		structType := reflect.StructOf([]reflect.StructField{
+			{
+				Name: "Config",
+				Type: reflect.TypeOf(c),
+				Tag:  reflect.StructTag(fmt.Sprintf(`mapstructure:"%s"`, module.Name())),
+			},
+		})
+
+		// Create a new pointer to an instance of the dynamic struct.
+		instance := reflect.New(structType)
+		// Set the 'Config' field of our dynamic struct to point to the module's config object.
+		instance.Elem().Field(0).Set(reflect.ValueOf(c))
+
+		// Unmarshal the configuration into our dynamically created struct instance.
+		if err := viper.Unmarshal(instance.Interface()); err != nil {
 			zap.S().Error("Config Unmarshal failed: " + err.Error())
 		}
+		fmt.Println(module.Config())
 	}
 	for _, m := range e.modules {
 		h4m := hub

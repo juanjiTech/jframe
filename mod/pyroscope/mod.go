@@ -10,11 +10,11 @@ import (
 )
 
 type Config struct {
-	ApplicationName string `yaml:"applicationName"`
-	ServerAddress   string `yaml:"serverAddress"`
-	BasicAuthUser   string `yaml:"basicAuthUser"`
-	BasicAuthPass   string `yaml:"basicAuthPass"`
-	TenantID        string `yaml:"tenantID"`
+    ApplicationName string `yaml:"applicationName" mapstructure:"applicationName"`
+    ServerAddress   string `yaml:"serverAddress" mapstructure:"serverAddress"`
+    BasicAuthUser   string `yaml:"basicAuthUser" mapstructure:"basicAuthUser"`
+    BasicAuthPass   string `yaml:"basicAuthPass" mapstructure:"basicAuthPass"`
+    TenantID        string `yaml:"tenantID" mapstructure:"tenantID"`
 }
 
 var _ kernel.Module = (*Mod)(nil)

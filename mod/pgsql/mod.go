@@ -11,12 +11,12 @@ import (
 var _ kernel.Module = (*Mod)(nil)
 
 type Config struct {
-	Host     string `yaml:"host"`
-	PORT     string `yaml:"port"`
-	User     string `yaml:"user"`
-	Password string `yaml:"password"`
-	Name     string `yaml:"name"`
-	SSLMode  string `yaml:"sslMode"`
+	Host     string `yaml:"host" mapstructure:"host"`
+	PORT     string `yaml:"port" mapstructure:"port"`
+	User     string `yaml:"user" mapstructure:"user"`
+	Password string `yaml:"password" mapstructure:"password"`
+	Name     string `yaml:"name" mapstructure:"name"`
+	SSLMode  string `yaml:"sslMode" mapstructure:"sslMode"`
 }
 
 type Mod struct {

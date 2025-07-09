@@ -14,9 +14,9 @@ import (
 )
 
 type Config struct {
-	ServiceName    string `yaml:"serviceName"`
-	ServiceVersion string `yaml:"serviceVersion"`
-	DSN            string `yaml:"dsn"`
+	ServiceName    string `yaml:"serviceName" mapstructure:"serviceName"`
+	ServiceVersion string `yaml:"serviceVersion" mapstructure:"serviceVersion"`
+	DSN            string `yaml:"dsn" mapstructure:"dsn"`
 }
 
 var _ kernel.Module = (*Mod)(nil)

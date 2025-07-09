@@ -14,11 +14,11 @@ import (
 var _ kernel.Module = (*Mod)(nil)
 
 type Config struct {
-	Addr     string `yaml:"addr"`
-	PORT     string `yaml:"port"`
-	Username string `yaml:"username"`
-	Password string `yaml:"password"`
-	DB       int    `yaml:"db"`
+	Addr     string `yaml:"addr" mapstructure:"addr"`
+	PORT     string `yaml:"port" mapstructure:"port"`
+	Username string `yaml:"username" mapstructure:"username"`
+	Password string `yaml:"password" mapstructure:"password"`
+	DB       int    `yaml:"db" mapstructure:"db"`
 }
 
 type Mod struct {

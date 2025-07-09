@@ -17,13 +17,13 @@ type Mod struct {
 }
 
 type Config struct {
-	Addr     string `yaml:"addr"`
-	PORT     string `yaml:"port"`
-	USER     string `yaml:"user"`
-	PASSWORD string `yaml:"password"`
-	DATABASE string `yaml:"database"`
-	UseTLS   bool   `yaml:"useTLS"`
-	Debug    bool   `yaml:"debug"`
+	Addr     string `yaml:"addr" mapstructure:"addr"`
+	PORT     string `yaml:"port" mapstructure:"port"`
+	USER     string `yaml:"user" mapstructure:"user"`
+	PASSWORD string `yaml:"password" mapstructure:"password"`
+	DATABASE string `yaml:"database" mapstructure:"database"`
+	UseTLS   bool   `yaml:"useTLS" mapstructure:"useTLS"`
+	Debug    bool   `yaml:"debug" mapstructure:"debug"`
 }
 
 func (m *Mod) Config() any {
