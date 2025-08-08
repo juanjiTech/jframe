@@ -17,7 +17,6 @@ import (
 	"github.com/soheilhy/cmux"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"go.uber.org/zap/zapcore"
 )
 
 var (
@@ -27,7 +26,7 @@ var (
 		Short:   "Start server",
 		Example: "jframe server -c ./config.yaml",
 		Run: func(cmd *cobra.Command, args []string) {
-			logx.PreInit()
+			//logx.PreInit()
 			log := logx.NameSpace("cmd.server")
 			log.Info("loading config...")
 			// Enable BindStruct to allow unmarshal env into a nested struct
@@ -43,11 +42,11 @@ var (
 			if conf.Get().SentryDsn != "" {
 				sentry.Init()
 			}
-			if conf.Get().MODE == "" || conf.Get().MODE == "debug" {
-				logx.Init(zapcore.DebugLevel)
-			} else {
-				logx.Init(zapcore.InfoLevel)
-			}
+			//if conf.Get().MODE == "" || conf.Get().MODE == "debug" {
+			//	logx.Init(zapcore.DebugLevel)
+			//} else {
+			//	logx.Init(zapcore.InfoLevel)
+			//}
 			defer func() {
 				if err := recover(); err != nil {
 					log.Errorw("panic", "error", err)
