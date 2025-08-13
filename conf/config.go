@@ -23,6 +23,8 @@ func LoadConfig(configPath ...string) error {
 		viper.SetConfigFile(configPath[0])
 	}
 
+	serveConfig = new(GlobalConfig)
+	
 	loadConfig := func() error {
 		newConf := new(GlobalConfig)
 		err := viper.ReadInConfig()
