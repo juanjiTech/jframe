@@ -24,16 +24,15 @@ func LoadConfig(configPath ...string) error {
 	}
 
 	serveConfig = new(GlobalConfig)
-	
+
 	loadConfig := func() error {
 		newConf := new(GlobalConfig)
 		err := viper.ReadInConfig()
 		if err != nil {
-			if noCustomConfigPath && errors.As(err, &viper.ConfigFileNotFoundError{}) {
-				// 没指定配置文件路径，且不是配置文件未找到错误
-				return nil
+			// 没指定配置文件路径且不是配置文件未找到错误则忽略。
+			if (!noCustomConfigPath || !errors.As(err, &viper.ConfigFileNotFoundError{})) {
+				return errors.Wrap(err, "config read failed")
 			}
-			return errors.Wrap(err, "config read failed")
 		}
 		err = viper.Unmarshal(newConf)
 		if err != nil {

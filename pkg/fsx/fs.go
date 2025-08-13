@@ -69,7 +69,7 @@ func FileCreate(content bytes.Buffer, name string) {
 	if err != nil {
 		log.Println(err)
 	}
-	file.Close()
+	_ = file.Close()
 }
 
 // Open 打开文件

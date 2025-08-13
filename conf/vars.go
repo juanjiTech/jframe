@@ -1,16 +1,16 @@
 package conf
 
 type GlobalConfig struct {
-	MODE string `yaml:"mode"`
-	Port string `yaml:"port"` // grpc和http服务监听端口
+	MODE string `yaml:"mode" mapstructure:"mode"`
+	Port string `yaml:"port" mapstructure:"port"` // grpc和http服务监听端口
 	Log  struct {
-		LogPath string `yaml:"logPath"`
+		LogPath string `yaml:"logPath" mapstructure:"logPath"`
 		CLS     struct {
-			Endpoint    string `yaml:"endpoint"`
-			AccessKey   string `yaml:"accessKey"`
-			AccessToken string `yaml:"accessToken"`
-			TopicID     string `yaml:"topicID"`
-		} `yaml:"cls"`
-	} `yaml:"log"`
-	SentryDsn string `yaml:"sentryDsn"`
+			Endpoint    string `yaml:"endpoint" mapstructure:"endpoint"`
+			AccessKey   string `yaml:"accessKey" mapstructure:"accessKey"`
+			AccessToken string `yaml:"accessToken" mapstructure:"accessToken"`
+			TopicID     string `yaml:"topicID" mapstructure:"topicID"`
+		} `yaml:"cls" mapstructure:"cls"`
+	} `yaml:"log" mapstructure:"log"`
+	SentryDsn string `yaml:"sentryDsn" mapstructure:"sentryDsn"`
 }
