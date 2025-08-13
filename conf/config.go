@@ -14,7 +14,8 @@ var SysVersion = "dev"
 var serveConfig *GlobalConfig
 
 func LoadConfig(configPath ...string) error {
-	if len(configPath) == 0 || configPath[0] == "" {
+	noCustomConfigPath := len(configPath) == 0 || (len(configPath) >= 1 && configPath[0] == "")
+	if noCustomConfigPath {
 		viper.SetConfigName("config")
 		viper.AddConfigPath(".")
 		viper.AddConfigPath("./config")
@@ -26,7 +27,7 @@ func LoadConfig(configPath ...string) error {
 		newConf := new(GlobalConfig)
 		err := viper.ReadInConfig()
 		if err != nil {
-			if len(configPath) == 0 && errors.As(err, &viper.ConfigFileNotFoundError{}) {
+			if noCustomConfigPath && errors.As(err, &viper.ConfigFileNotFoundError{}) {
 				// 没指定配置文件路径，且不是配置文件未找到错误
 				return nil
 			}
