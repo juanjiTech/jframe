@@ -2,16 +2,18 @@ package conf
 
 import (
 	"fmt"
+
 	"github.com/fsnotify/fsnotify"
+	"github.com/pkg/errors"
 	"github.com/spf13/viper"
-	"os"
+	"go.uber.org/zap"
 )
 
 var SysVersion = "dev"
 
 var serveConfig *GlobalConfig
 
-func LoadConfig(configPath ...string) {
+func LoadConfig(configPath ...string) error {
 	if len(configPath) == 0 || configPath[0] == "" {
 		viper.SetConfigName("config")
 		viper.AddConfigPath(".")
@@ -20,28 +22,38 @@ func LoadConfig(configPath ...string) {
 		viper.SetConfigFile(configPath[0])
 	}
 
-	loadConfig := func() {
+	loadConfig := func() error {
 		newConf := new(GlobalConfig)
 		err := viper.ReadInConfig()
 		if err != nil {
-			fmt.Println("Config Read failed: " + err.Error())
-			os.Exit(1)
+			if len(configPath) == 0 && errors.As(err, &viper.ConfigFileNotFoundError{}) {
+				// 没指定配置文件路径，且不是配置文件未找到错误
+				return nil
+			}
+			return errors.Wrap(err, "config read failed")
 		}
 		err = viper.Unmarshal(newConf)
 		if err != nil {
-			fmt.Println("Config Unmarshal failed: " + err.Error())
-			os.Exit(1)
+			return errors.Wrap(err, "config unmarshal failed")
 		}
 		serveConfig = newConf
+		return nil
 	}
 
-	loadConfig()
+	err := loadConfig()
+	if err != nil {
+		return err
+	}
 
 	viper.OnConfigChange(func(e fsnotify.Event) {
 		fmt.Println("Config fileHandle changed: ", e.Name)
-		loadConfig()
+		err = loadConfig()
+		if err != nil {
+			zap.S().Error(err)
+		}
 	})
 	viper.WatchConfig()
+	return nil
 }
 
 func Get() *GlobalConfig {
