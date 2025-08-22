@@ -3,11 +3,13 @@ package uptrace
 import (
 	"context"
 	"errors"
+	"github.com/redis/go-redis/v9"
 	"sync"
 	"time"
 
 	"github.com/juanjiTech/jframe/core/kernel"
 	"github.com/opentracing/opentracing-go"
+	"github.com/redis/go-redis/extra/redisotel/v9"
 	"github.com/uptrace/uptrace-go/uptrace"
 	"gorm.io/gorm"
 	"gorm.io/plugin/opentelemetry/tracing"
@@ -84,6 +86,17 @@ func (m *Mod) Load(hub *kernel.Hub) error {
 		hub.Log.Info("find gorm in kernel, enable tracing for gorm ...")
 		if err := db.Use(tracing.NewPlugin()); err != nil {
 			hub.Log.Error("failed to enable tracing for GORM", "error", err)
+			return err
+		}
+	}
+
+	var rds *redis.Client
+	if hub.Load(&rds) != nil {
+		hub.Log.Info("no redis find in kernel, skip tracing for redis")
+	} else {
+		hub.Log.Info("find redis in kernel, enable tracing for redis ...")
+		if err := redisotel.InstrumentTracing(rds); err != nil {
+			hub.Log.Error("failed to enable tracing for Redis", "error", err)
 			return err
 		}
 	}
