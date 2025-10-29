@@ -4,6 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net"
+	"net/http"
+	"sync"
+	"time"
+
 	"github.com/juanjiTech/jframe/conf"
 	"github.com/juanjiTech/jframe/core/kernel"
 	"github.com/juanjiTech/jframe/mod/jinx/healthcheck"
@@ -13,10 +18,6 @@ import (
 	"github.com/opentracing/opentracing-go"
 	"github.com/soheilhy/cmux"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
-	"net"
-	"net/http"
-	"sync"
-	"time"
 )
 
 var _ kernel.Module = (*Mod)(nil)
@@ -67,7 +68,17 @@ func (m *Mod) Start(hub *kernel.Hub) error {
 		return errors.New("can't load tcpMux from kernel")
 	}
 
-	httpL := tcpMux.Match(cmux.HTTP1Fast())
+	httpL := tcpMux.Match(cmux.PrefixMatcher(
+		http.MethodGet,
+		http.MethodHead,
+		http.MethodPost,
+		http.MethodPut,
+		http.MethodPatch,
+		http.MethodDelete,
+		http.MethodConnect,
+		http.MethodOptions,
+		http.MethodTrace,
+	))
 	m.listener = httpL
 
 	// check if tracer exist
