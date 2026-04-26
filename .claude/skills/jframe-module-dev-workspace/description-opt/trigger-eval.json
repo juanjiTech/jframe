@@ -1,0 +1,20 @@
+[
+  {"query": "users 模块的骨架已经有了，现在需要实现完整的 CRUD API，model 有 username email phone", "should_trigger": true},
+  {"query": "帮我在 orders 模块里用 stdao 实现数据层，需要支持事务和分页查询", "should_trigger": true},
+  {"query": "我写好了 service 层，现在要写 handler，怎么用 binding.JSON 中间件把请求参数注入进来", "should_trigger": true},
+  {"query": "模块里需要调用 Redis 缓存用户信息，hub.Load 拿到 redis client 之后具体怎么用", "should_trigger": true},
+  {"query": "jin 的 handler 函数签名可以是任意的对吧？我想让 handler 直接接收 parsed request struct", "should_trigger": true},
+  {"query": "给 products 模块加个 gRPC endpoint，需要通过 grpc-gateway 暴露 REST API", "should_trigger": true},
+  {"query": "settings 系统怎么用？我想做一个运行时可以改的每页显示条数配置", "should_trigger": true},
+  {"query": "module 的 handler 测试怎么写？我需要测试 POST /api/users 这个接口", "should_trigger": true},
+  {"query": "我想设计一个全新的通知模块，需要规划它的生命周期阶段和 DI 依赖关系", "should_trigger": false},
+  {"query": "帮我 scaffold 一个新模块叫 analytics，先不急写代码，先规划架构", "should_trigger": false},
+  {"query": "jframe create -n xxx 这个命令生成的目录结构是什么样的", "should_trigger": false},
+  {"query": "怎么在 modList 里注册新模块？注册顺序有讲究吗", "should_trigger": false},
+  {"query": "config.yaml 里模块配置的 key 命名规则是什么，驼峰还是下划线", "should_trigger": false},
+  {"query": "Go 项目里 GORM 的 AutoMigrate 一般什么时候调用比较好", "should_trigger": false},
+  {"query": "帮我调试一下为什么 hub.Load 返回 error，明明其他模块已经 Map 了", "should_trigger": false},
+  {"query": "Docker 里编译 jframe 镜像时 go build 失败了，依赖下不下来", "should_trigger": false},
+  {"query": "帮我重构 kernel.go 里的 StartModule 方法，加上并发控制", "should_trigger": false},
+  {"query": "jin 框架和 gin 有什么区别？为什么选择 jin", "should_trigger": false}
+]

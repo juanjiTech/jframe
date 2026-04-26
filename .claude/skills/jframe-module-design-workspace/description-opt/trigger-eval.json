@@ -1,0 +1,20 @@
+[
+  {"query": "我想在 jframe 里加一个消息队列模块，用 RabbitMQ，需要支持发布和消费消息，其他模块通过 DI 拿到 MQ client", "should_trigger": true},
+  {"query": "帮我 create 一个新 mod 叫 payment，需要对接支付宝和微信支付的 SDK，要有配置", "should_trigger": true},
+  {"query": "我要新增一个模块来处理文件上传到 S3，类似 b2x 那个模块的设计模式", "should_trigger": true},
+  {"query": "jframe 里怎么设计一个后台定时任务模块？需要跑 cron job 之类的", "should_trigger": true},
+  {"query": "add a websocket module to the jframe project that other modules can use to push real-time events", "should_trigger": true},
+  {"query": "我需要把 elasticsearch 集成进来，像 myDB 和 rds 一样做成一个基础设施模块", "should_trigger": true},
+  {"query": "想给项目加个邮件发送的功能，应该怎么组织代码结构比较好", "should_trigger": true},
+  {"query": "新建一个 audit 审计模块，记录所有 API 调用日志到单独的数据库表", "should_trigger": true},
+  {"query": "帮我在 users 模块的 handler 里加一个 /api/users/:id/profile 的接口", "should_trigger": false},
+  {"query": "users 模块的 dao 层查询太慢了，帮我优化一下 SQL", "should_trigger": false},
+  {"query": "jin 的路由怎么做参数校验？binding.JSON 之后怎么检查必填字段", "should_trigger": false},
+  {"query": "modList 里的模块加载顺序能不能动态调整，而不是硬编码的", "should_trigger": false},
+  {"query": "帮我把 config.yaml 里 MySQL 的配置改成读写分离的两个地址", "should_trigger": false},
+  {"query": "跑 go test ./mod/users/... 报错了，好像是 mock 的问题", "should_trigger": false},
+  {"query": "docker-compose-dev.yml 里能不能加个 MongoDB 的容器", "should_trigger": false},
+  {"query": "我的 grpc service proto 文件编译出错了，protoc 报找不到 import", "should_trigger": false},
+  {"query": "现有的 rds 模块想加一个 Redis Cluster 的支持，怎么改", "should_trigger": false},
+  {"query": "jframe 的 kernel 源码里 reflect.StructOf 那段能解释一下吗", "should_trigger": false}
+]

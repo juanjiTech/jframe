@@ -1,6 +1,6 @@
 module github.com/juanjiTech/jframe
 
-go 1.23.0
+go 1.24.0
 
 toolchain go1.24.2
 
@@ -15,7 +15,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.1
 	github.com/grpc-ecosystem/protoc-gen-grpc-gateway-ts v1.1.2
 	github.com/juanjiTech/inject/v2 v2.0.1
-	github.com/juanjiTech/jin v0.0.0-20240610131617-93c79097b509
+	github.com/juanjiTech/jin v0.0.0-20251201033621-115c0eb066ba
 	github.com/juanjiTech/sentry-jin v0.0.0-20230921031955-5eb1a8402d04
 	github.com/oklog/ulid/v2 v2.1.1
 	github.com/opentracing/opentracing-go v1.2.0
@@ -33,8 +33,8 @@ require (
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.62.0
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.62.0
 	go.uber.org/zap v1.27.0
-	golang.org/x/crypto v0.39.0
-	golang.org/x/sync v0.15.0
+	golang.org/x/crypto v0.44.0
+	golang.org/x/sync v0.18.0
 	google.golang.org/grpc v1.73.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.5.1
 	google.golang.org/protobuf v1.36.6
@@ -114,9 +114,9 @@ require (
 	go.opentelemetry.io/proto/otlp v1.7.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/net v0.41.0 // indirect
-	golang.org/x/sys v0.33.0 // indirect
-	golang.org/x/text v0.26.0 // indirect
+	golang.org/x/net v0.47.0 // indirect
+	golang.org/x/sys v0.38.0 // indirect
+	golang.org/x/text v0.31.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20250707201910-8d1bb00bc6a7 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250707201910-8d1bb00bc6a7 // indirect
 	gorm.io/driver/clickhouse v0.7.0 // indirect
