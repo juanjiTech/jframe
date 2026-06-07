@@ -164,20 +164,9 @@ moduleName:
 
 ## DI 容器中已有的共享类型
 
-以下类型由内置模块 Map，业务模块可以 Load 使用：
+**维护位置：** [`docs/di-reference.md`](docs/di-reference.md) — 共享类型表、Load 示例与 Map/Load 规则以该文档为准；新增基础设施 Map 时请同步更新。
 
-| 类型 | Map 来源 | 可用阶段 |
-|------|----------|----------|
-| `*net.Listener` | 内核 (server.go) | PreInit 起 |
-| `cmux.CMux` | 内核 (server.go) | PreInit 起 |
-| `**jin.Engine` | jinx.PreInit | Init 起 |
-| `**gorm.DB` | myDB.PreInit / pgsql.PreInit | Init 起 |
-| `**redis.Client` | rds.PreInit | Init 起 |
-| `*grpc.Server` | grpcGateway.PreInit | Init 起 |
-| `*gateway.Gateway` | grpcGateway.PostInit | Load 起 |
-| `**b2.Client`, `**b2.Bucket` | b2x.PreInit | Init 起 |
-
-**注意：** Map 使用 `hub.Map(&value)` 所以存储类型是 `**T`，Load 时也需要 `var v *T; hub.Load(&v)`。
+业务模块优先查该表，在约定阶段 `hub.Load` 取用；若对 Map 时机或配置仍有疑问，可再阅读对应 `mod/<name>/mod.go`。
 
 ## 模块分层约定
 

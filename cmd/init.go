@@ -11,7 +11,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:          "jframe",
 	SilenceUsage: true,
-	Short:        "jframe is a Golang framework with unlimited creativity",
+	Short:        "jframe is an AI-friendly Golang framework for server and desktop development with quality control",
 	Example:      "jframe server -c ./config.yaml",
 }
 
