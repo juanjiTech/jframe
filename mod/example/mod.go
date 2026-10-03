@@ -2,62 +2,52 @@ package example
 
 import (
 	"context"
-	"errors"
-	"fmt"
-	"github.com/juanjiTech/jframe/core/kernel"
-	"github.com/juanjiTech/jin"
-	"reflect"
 	"sync"
+
+	"github.com/juanjiTech/jframe/core/kernel"
+	"github.com/juanjiTech/jframe/mod/example/dao"
+	"github.com/juanjiTech/jframe/mod/example/handler"
+	"github.com/juanjiTech/jframe/mod/example/service"
+	"github.com/juanjiTech/jin"
+	"github.com/pkg/errors"
+	"gorm.io/gorm"
 )
 
 var _ kernel.Module = (*Mod)(nil)
 
+// Mod 是 create 脚手架的金标准模板：演示 Load 中 dao → service → handler 组装，
+// 以及用 github.com/juanjiTech/jframe/pkg/stdao 做数据访问。
+// 默认不注册进 modList；需要联调时再挂上。
 type Mod struct {
-	kernel.UnimplementedModule // 请为所有Module引入UnimplementedModule
+	kernel.UnimplementedModule
 }
 
-func (m *Mod) Name() string {
-	return "example"
-}
-
-// 下面的方法皆为可选实现
-
-func (m *Mod) PreInit(h *kernel.Hub) error {
-	return nil
-}
-
-func (m *Mod) Init(h *kernel.Hub) error {
-	h.Map("hello world") // 在内核注册这个依赖
-	return nil
-}
-
-func (m *Mod) PostInit(h *kernel.Hub) error {
-	return nil
-}
+func (m *Mod) Name() string { return "example" }
 
 func (m *Mod) Load(h *kernel.Hub) error {
-	str := h.Value(reflect.TypeOf("string")).String() // 从内核获取上面注册的依赖
-	fmt.Println(str)
-	_, _ = h.Invoke(func(s string) { fmt.Println(s) }) // 也可以这样从内核获取上面注册的依赖
-	var str2 string
-	_ = h.Load(&str2) // 也可以这样从内核获取上面注册的依赖
-
-	var http *jin.Engine
-	err := h.Load(&http)
-	if err != nil {
-		return errors.New("can't load jin from kernel")
+	var j *jin.Engine
+	if err := h.Load(&j); err != nil {
+		return errors.Wrap(err, "load jin.Engine")
 	}
-	http.GET("/ping", func(c *jin.Context) {
-		_, _ = c.Writer.WriteString("pong")
-	})
+	var db *gorm.DB
+	if err := h.Load(&db); err != nil {
+		return errors.Wrap(err, "load gorm.DB")
+	}
+
+	itemDao, err := dao.NewItemDao(db)
+	if err != nil {
+		return errors.Wrap(err, "init item dao")
+	}
+	itemSvc := service.NewItemService(itemDao)
+	itemHandler := handler.NewItemHandler(itemSvc)
+
+	g := j.Group("/api/example")
+	itemHandler.RegisterRoutes(g)
+	h.Log.Infow("routes registered", "group", "/api/example")
 	return nil
 }
 
-func (m *Mod) Start(h *kernel.Hub) error {
-	return nil
-}
-
-func (m *Mod) Stop(wg *sync.WaitGroup, ctx context.Context) error {
+func (m *Mod) Stop(wg *sync.WaitGroup, _ context.Context) error {
 	defer wg.Done()
 	return nil
 }
