@@ -9,7 +9,7 @@ jFrame 的「AI 友好」来自可预测的结构，而非某个特定 AI 产品
 1. **模块即边界** — 一次改动通常只涉及 `mod/<name>/` 下的一个业务模块。
 2. **生命周期由内核编排** — 启动顺序与阶段调度框架已固定，Agent 不必管理「谁先启动、谁 Map 谁 Load」；只需在约定阶段（基础设施 PreInit Map、业务 Load 组装）写当前模块代码。
 3. **依赖按类型取用，优先查 DI 参考** — 业务模块在 `Load()` 等阶段 `hub.Load(&db)` 即可拿到所需依赖；先查 [DI 参考](di-reference.md) 中的共享类型表，通常不必为了取依赖而通读其他模块。若对 Map 时机、配置或行为仍不确定，再读对应基础设施模块（如 `mod/myDB/mod.go`）亦可。
-4. **模板可复制** — `mod/example/` 与 `create` 命令输出即金标准。
+4. **模板可复制** — `mod/example/` 已含可编译的分层实现（`pkg/stdao` DAO + service + handler + `Load` 组装）；`create` 命令据此生成新模块。
 5. **规则可读取** — `CLAUDE.md` 与 Skills 把约定写进仓库，减少臆测。
 
 ## 推荐工作流
@@ -56,15 +56,17 @@ Module 边界 + 分层让 diff 范围自然受限，便于人工与 AI 审查。
 go run . config -p config.example.yaml -f
 ```
 
-## 仓库内 Agent 资源
+## 仓库内 Agent 资源（渐进披露）
 
-| 资源 | 路径 | 用途 |
+| 层级 | 资源 | 用途 |
 |------|------|------|
-| DI 共享类型表 | [`docs/di-reference.md`](di-reference.md) | **权威维护位置**：可 Load 的类型、Map 来源、可用阶段 |
-| Agent 开发参考 | [`CLAUDE.md`](../CLAUDE.md) | 生命周期、DI 规则、jin、create 流程、pkg 工具 |
-| 模块设计 Skill | [`.claude/skills/jframe-module-design`](../.claude/skills/jframe-module-design/SKILL.md) | 新建模块、集成外部服务前的架构设计 |
-| 模块实现 Skill | [`.claude/skills/jframe-module-dev`](../.claude/skills/jframe-module-dev/SKILL.md) | handler / service / dao 实现与路由注册 |
-| 模板模块 | [`mod/example/`](../mod/example/) | create 命令复制的金标准 |
+| L0 | [`CLAUDE.md`](../CLAUDE.md) 顶部阅读表 | 先决定读什么 |
+| L1 | [`docs/di-reference.md`](di-reference.md) · [`docs/module-implementation.md`](module-implementation.md) · [`docs/stdao.md`](stdao.md) | 类型表 / 分层 / DAO |
+| L2 | Skills 的 **SKILL.md**（设计 / 实现） | 流程与清单；**不要**默认打开全部 references |
+| L3 | skill `references/*` · [`mod/example/`](../mod/example/) | 按需深读；example 为可编译金标准 |
+
+设计 Skill：`.claude/skills/jframe-module-design/`  
+实现 Skill：`.claude/skills/jframe-module-dev/`（`references/stdao.md`、`jin-handlers.md`、`wiring.md`、`advanced.md`）
 
 ## 给 Agent 的约束提示（可复制）
 
@@ -96,7 +98,6 @@ go run . config -p config.example.yaml -f
 
 ## 延伸阅读
 
-- [DI 参考](di-reference.md) — 共享类型表
-- [使用指南](usage.md) — CLI、配置、Docker
-- [README](../README.md) — 产品定位与快速开始
-- [DeepWiki](https://deepwiki.com/juanjiTech/jframe/) — 在线文档
+- [实现层](module-implementation.md) · [stdao](stdao.md)
+- [DI 参考](di-reference.md) · [使用指南](usage.md)
+- [README](../README.md) · [DeepWiki](https://deepwiki.com/juanjiTech/jframe/)

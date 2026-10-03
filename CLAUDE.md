@@ -1,5 +1,16 @@
 # CLAUDE.md — jframe 项目 Agent 开发指南
 
+## 渐进式阅读（先少后多）
+
+| 任务 | 先读 | 需要时再读 |
+|------|------|------------|
+| 改现有模块实现 | `mod/<name>/` + 对照 `mod/example/` | `docs/stdao.md` / skill `jframe-module-dev` 的 `references/` |
+| 新建模块 | skill `jframe-module-design` + `go run . create` | `docs/di-reference.md`、design `references/` |
+| 查可 Load 类型 | `docs/di-reference.md` | 对应 `mod/<infra>/mod.go` |
+| 架构 / CLI | `docs/usage.md` | `docs/module-implementation.md` |
+
+不要一上来通读全部 Skills references。
+
 ## 项目概述
 
 jframe 是一个基于模块化内核的 Go 应用脚手架框架。所有功能以 `kernel.Module` 为单位组织，通过依赖注入容器 (`inject/v2`) 在模块间传递依赖，实现零耦合。
@@ -170,29 +181,21 @@ moduleName:
 
 ## 模块分层约定
 
-业务模块的标准内部结构：
+金标准：`mod/example/`。说明文档：`docs/module-implementation.md`。
 
 ```
-handler/ — HTTP 请求处理，解析输入、调用 service、格式化响应
-service/ — 业务逻辑，编排 dao 调用、执行业务规则
-dao/     — 数据访问层，GORM 查询，基于 stdao.Std[T]
-model/   — 数据模型（GORM 结构体）和 DTO
-e/       — 领域错误码定义
+handler → service → dao → model
+Load() 自底向上：NewDao → NewService → NewHandler → 注册路由
 ```
 
-数据流向: `handler → service → dao → model`
-
-在 `mod.go` 的 `Load()` 方法中自底向上组装：dao → service → handler → 注册路由。
+DAO 使用 `github.com/juanjiTech/jframe/pkg/stdao`（详见 `docs/stdao.md`，勿自行发明另一套 DAO 库）。
 
 ## 常用工具包 (pkg/)
 
 ### stdao — 泛型 DAO
 
-```go
-type Std[T any] struct { db *gorm.DB }
-// 提供: Init(db), Create(ctx, t), List(ctx), Update(ctx, t), Delete(ctx, t)
-// 事务: Begin(), SetTxToCtx(ctx, tx), GetTxFromCtx(ctx) — 通过 context 传播事务
-```
+→ **`docs/stdao.md`** + **`mod/example/dao/item.go`**（`Std[*model.T]`、`Init` AutoMigrate、`GetTxFromCtx`）。  
+`create -n <name>` 复制 example 并把 `example` 替换为模块名。
 
 ### settings — 动态设置
 
@@ -231,7 +234,7 @@ docker compose -f docker-compose-dev.yml up -d
 ## Agent 开发注意事项
 
 1. **新功能 = 新模块。** jframe 的一切功能都是模块。不要在 main.go 或 cmd/ 中直接写业务逻辑。
-2. **通过 DI 通信。** 模块间不直接 import，通过 Hub 的 Map/Load 传递共享资源。
+2. **通过 DI 通信。** 不要跨模块调用对方构造函数/内部实现；共享实例用 Hub Map/Load。为 `Load` 类型而 import 对方包是允许的。
 3. **生命周期选择很重要。** 参考已有模块选择正确的阶段。最常见的模式：基础设施在 PreInit，业务路由在 Load。
 4. **Config 需要双 tag。** `yaml:"field" mapstructure:"field"` 缺一不可。
 5. **Map 传指针。** `hub.Map(&x)` 不是 `hub.Map(x)`。Load 也是 `hub.Load(&x)`。

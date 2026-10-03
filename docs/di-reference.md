@@ -47,5 +47,6 @@ hub.Invoke(func(db *gorm.DB) { ... })
 ## 延伸阅读
 
 - [使用指南](usage.md) — 架构与 Module 生命周期
+- [实现层](module-implementation.md) · [stdao](stdao.md)
 - [AI 开发指南](ai-development.md) — Agent 工作流
 - [CLAUDE.md](../CLAUDE.md) — Agent 开发约定（链至本文档维护 DI 类型表）
