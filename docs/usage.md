@@ -21,10 +21,12 @@ Config 反序列化
 ```
 handler/  → HTTP 请求解析与响应
 service/  → 业务逻辑
-dao/      → 数据访问（可基于 pkg/stdao）
+dao/      → 数据访问（`pkg/stdao`，见 mod/example）
 model/    → 数据模型与 DTO
 e/        → 领域错误码
 ```
+
+完整分层范例在 **`mod/example/`**；实现说明见 [module-implementation.md](module-implementation.md)、[stdao.md](stdao.md)。`jframe create` 以此为模板；example 默认不挂进 `modList`。
 
 基础设施模块（数据库、Redis、HTTP 网关、可观测性等）与业务模块使用同一套 Module 接口，在 `modList` 中统一注册。
 

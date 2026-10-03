@@ -14,7 +14,7 @@ jFrame 是一个基于模块化内核与依赖注入的 Go 应用脚手架。业
 
 - **模块化领域边界 + 分层约定** — 业务模块按类别高度内聚，模块内固定 handler → service → dao → model 分层；AI 只需聚焦当前模块与层级，减少无关上下文干扰。
 - **固定生命周期 + DI** — 内核按 Config → PreInit → … → Stop 六阶段统一编排启动，AI 不必把注意力耗在启动顺序与模块调度上。写业务模块时在约定阶段（如 `Load()`）通过 `hub.Load` 按类型取用依赖；优先查 [DI 参考](docs/di-reference.md)，上下文可集中在当前模块内。
-- **脚手架 + 金标准模板** — `jframe create -n <name>` 基于 `mod/example/` 生成一致目录结构，AI 生成代码有明确参照。
+- **脚手架 + 金标准模板** — `jframe create -n <name>` 基于 `mod/example/`（含 `pkg/stdao` DAO 与完整分层）生成一致结构，AI 生成代码有明确参照。
 - **Agent 指南开箱即用** — 仓库提供 [`CLAUDE.md`](CLAUDE.md) 与 [Agent Skills](.claude/skills/)（模块设计 / 模块实现），Cursor、Claude Code 可直接读取框架约定。
 - **结构约束，审查友好** — 模块边界、DI 规则、配置 tag 均有硬性约定，便于 AI 辅助开发与人工 / AI 代码审查。
 
@@ -72,16 +72,16 @@ go run . create -n users            # 创建新模块
 
 更多场景与提示词建议见 [AI 开发指南](docs/ai-development.md)。
 
-## 文档
+## 文档（建议阅读顺序）
 
-| 文档 | 说明 |
-|------|------|
-| [docs/di-reference.md](docs/di-reference.md) | DI 共享类型表（权威维护位置） |
-| [docs/usage.md](docs/usage.md) | 架构概览、CLI、模块创建、配置与 Docker |
-| [docs/ai-development.md](docs/ai-development.md) | 面向 Cursor / Claude 团队的开发工作流 |
-| [CLAUDE.md](CLAUDE.md) | Agent 开发约定（生命周期、分层、jin 等；DI 类型表见 di-reference） |
-| [DeepWiki](https://deepwiki.com/juanjiTech/jframe/) | 在线框架文档 |
-
+| 层级 | 文档 | 说明 |
+|------|------|------|
+| 入门 | [docs/usage.md](docs/usage.md) | 架构、CLI、配置、Docker |
+| Agent | [CLAUDE.md](CLAUDE.md) · [docs/ai-development.md](docs/ai-development.md) | 约定与工作流 |
+| DI | [docs/di-reference.md](docs/di-reference.md) | 可 Load 类型表（权威） |
+| 实现 | [docs/module-implementation.md](docs/module-implementation.md) · [docs/stdao.md](docs/stdao.md) · [`mod/example/`](mod/example/) | 分层与 DAO；需要时再深读 |
+| Skills | [`.claude/skills/`](.claude/skills/) | 设计 / 实现；细节在各 skill 的 `references/` |
+| 其它 | [DeepWiki](https://deepwiki.com/juanjiTech/jframe/) | 在线总览 |
 ## License
 
 [MIT](LICENSE)
